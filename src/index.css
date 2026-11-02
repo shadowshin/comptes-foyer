@@ -84,7 +84,9 @@ button:disabled {
   border-color: var(--bordure);
 }
 
-input {
+input,
+select,
+textarea {
   font: inherit;
   width: 100%;
   margin-top: 0.3rem;
@@ -95,7 +97,20 @@ input {
   color: var(--texte);
 }
 
+input[type='checkbox'] {
+  width: auto;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+input[aria-invalid='true'],
+select[aria-invalid='true'] {
+  border-color: var(--negatif);
+}
+
 input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--accent-clair);
@@ -250,4 +265,259 @@ a:focus-visible {
 
 .montant.negatif {
   color: var(--negatif);
+}
+
+/* --- Formulaires --- */
+
+h3 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--texte-secondaire);
+}
+
+label > input,
+label > select,
+label > textarea {
+  color: var(--texte);
+}
+
+.formulaire {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.grille-formulaire {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.9rem 1rem;
+  align-items: start;
+}
+
+.grille-formulaire .large {
+  grid-column: span 2;
+}
+
+.grille-formulaire .pleine-largeur {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 480px) {
+  .grille-formulaire .large {
+    grid-column: 1 / -1;
+  }
+}
+
+.erreur-champ {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--negatif);
+  font-size: 0.85rem;
+}
+
+.champ-recurrence {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.interrupteur,
+.case {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--texte);
+  padding-top: 1.6rem;
+}
+
+fieldset {
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.6rem 0.9rem;
+}
+
+fieldset .case {
+  padding-top: 0;
+}
+
+legend {
+  color: var(--texte-secondaire);
+  font-size: 0.9rem;
+  padding: 0 0.3rem;
+}
+
+.sous-formulaire {
+  border-top: 1px solid var(--bordure);
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.message-statut {
+  color: var(--accent-clair);
+}
+
+/* --- Filtres et tableau --- */
+
+.filtres {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+  align-items: end;
+  margin: 1.5rem 0 1rem;
+}
+
+.resume-tableau {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  align-items: baseline;
+  margin-top: 0;
+}
+
+.defilement-tableau {
+  overflow-x: auto;
+}
+
+.tableau {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.tableau th {
+  text-align: left;
+  color: var(--texte-secondaire);
+  font-weight: 500;
+  border-bottom: 1px solid var(--bordure);
+  padding: 0.5rem;
+}
+
+.tableau td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--bordure);
+  vertical-align: top;
+}
+
+.tableau tbody tr:hover {
+  background: var(--surface-haute);
+}
+
+.droite {
+  text-align: right;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-haute);
+  color: var(--texte-secondaire);
+  white-space: nowrap;
+}
+
+.badge-revenu {
+  color: var(--positif);
+}
+
+.badge-virement_interne {
+  color: var(--info);
+}
+
+.badge-impot {
+  color: var(--avertissement);
+}
+
+.a-categoriser {
+  color: var(--avertissement);
+}
+
+.bouton-icone {
+  background: transparent;
+  color: var(--texte-secondaire);
+  padding: 0.2rem 0.45rem;
+}
+
+.bouton-icone:hover {
+  color: var(--texte);
+  background: var(--surface-haute);
+}
+
+.bouton-icone.danger:hover {
+  color: var(--negatif);
+}
+
+.afficher-plus {
+  margin-top: 1rem;
+}
+
+.visuellement-cache {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* --- Paramètres --- */
+
+.pile {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.liste-simple {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ligne-ajout {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.ligne-ajout input {
+  margin-top: 0;
+}
+
+.ligne-compte,
+.ligne-categorie {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ligne-categorie input {
+  margin-top: 0;
+}
+
+.archive {
+  opacity: 0.55;
+}
+
+.pousser-droite {
+  margin-left: auto;
+}
+
+.grille-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
 }
