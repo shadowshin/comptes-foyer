@@ -26,5 +26,6 @@ describe('montants', () => {
   it('formate en euros à la française', () => {
     // Intl insère des espaces insécables : on les normalise pour la comparaison
     expect(formaterEuros(1234.5).replace(/\s/g, ' ')).toBe('1 234,50 €')
+    expect(formaterEuros(-0).replace(/\s/g, ' ')).toBe('0,00 €')
   })
 })

@@ -8,6 +8,7 @@ import { Connexion } from './pages/Connexion'
 import { Import } from './pages/Import'
 import { Parametres } from './pages/Parametres'
 import { Transactions } from './pages/Transactions'
+import { Tresorerie } from './pages/Tresorerie'
 
 export default function App() {
   if (configurationManquante) {
@@ -28,12 +29,11 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/connexion" element={<Connexion />} />
-          <Route element={<Layout />}>
+          <Route path="/connexion" element={<Connexion />} />          <Route element={<Layout />}>
             <Route index element={<Comptes />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="import" element={<Import />} />
-            <Route path="tresorerie" element={<AVenir titre="Trésorerie" etape={4} />} />
+            <Route path="tresorerie" element={<Tresorerie />} />
             <Route path="budgets" element={<AVenir titre="Budgets" etape={5} />} />
             <Route path="alertes" element={<AVenir titre="Alertes" etape={5} />} />
             <Route path="rapports" element={<AVenir titre="Rapports" etape={6} />} />

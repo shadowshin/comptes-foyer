@@ -11,6 +11,10 @@
   --negatif: #ef4444;
   --avertissement: #eab308;
   --info: #3b82f6;
+  /* couleurs des graphiques, validées sur la surface sombre (contraste, daltonisme) */
+  --graphe-positif: #059669;
+  --graphe-negatif: #ef4444;
+  --graphe-grille: #232c2a;
   --rayon: 10px;
 
   color-scheme: dark;
@@ -516,6 +520,162 @@ legend {
   margin-left: auto;
 }
 
+/* --- Trésorerie et graphiques --- */
+
+.filtres-ligne {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.filtres-ligne label {
+  min-width: 200px;
+}
+
+.case-seule {
+  padding-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-delta {
+  font-size: 0.85rem;
+  color: var(--texte-secondaire);
+}
+
+.kpi-delta.negatif {
+  color: var(--negatif);
+}
+
+.entete-carte {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.entete-carte h2 {
+  margin: 0;
+}
+
+.graphe {
+  position: relative;
+  margin: 0.5rem 0 0;
+}
+
+.graphe svg {
+  display: block;
+  overflow: visible;
+}
+
+.grille {
+  stroke: var(--graphe-grille);
+  stroke-width: 1;
+}
+
+.axe-zero {
+  stroke: var(--texte-secondaire);
+  stroke-width: 1;
+}
+
+.graduation {
+  fill: var(--texte-secondaire);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.etiquette {
+  fill: var(--texte);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.barre-positive {
+  fill: var(--graphe-positif);
+}
+
+.barre-negative {
+  fill: var(--graphe-negatif);
+}
+
+.barre.survolee {
+  filter: brightness(1.25);
+}
+
+.ligne-solde {
+  fill: none;
+  stroke: var(--graphe-positif);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.ligne-solde.projetee {
+  stroke-dasharray: 5 5;
+}
+
+.aire-solde {
+  fill: var(--graphe-positif);
+  opacity: 0.1;
+}
+
+.point-solde {
+  fill: var(--graphe-positif);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.repere,
+.viseur {
+  stroke: var(--texte-secondaire);
+  stroke-width: 1;
+}
+
+.repere {
+  opacity: 0.5;
+}
+
+.infobulle {
+  position: absolute;
+  pointer-events: none;
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.5rem 0.7rem;
+  min-width: 160px;
+  background: var(--surface-haute);
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--texte-secondaire);
+}
+
+.infobulle strong {
+  color: var(--texte);
+  font-size: 1rem;
+}
+
+.donnees-graphe {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.donnees-graphe summary {
+  cursor: pointer;
+  color: var(--texte-secondaire);
+}
+
+.donnees-graphe .tableau {
+  margin-top: 0.5rem;
+}
+
+.suggestions {
+  border: 1px dashed var(--accent);
+  border-radius: var(--rayon);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
 /* --- Import --- */
 
 .bouton-fichier {
@@ -600,8 +760,9 @@ legend {
   margin: 0;
 }
 
+/* espacement vertical entre les blocs d'une page (pas entre les cartes d'une grille) */
 .groupe-comptes,
-.carte + .carte {
+.contenu > .carte + .carte {
   margin-top: 1rem;
 }
 

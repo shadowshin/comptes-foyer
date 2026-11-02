@@ -3,7 +3,7 @@ import { versIso } from '../domain/dates'
 import type { LigneAInserer, MiseAJourVirement } from '../domain/import/preparation'
 import type { Regle } from '../domain/import/regles'
 import { construireOperations, type Saisie } from '../domain/saisie'
-import type { Categorie, Compte, CompteMembre, Membre, Transaction } from '../domain/types'
+import type { Categorie, Compte, CompteMembre, Membre, Recurrence, Transaction } from '../domain/types'
 import { supabase } from './supabase'
 
 const TAILLE_LOT = 500
@@ -236,6 +236,28 @@ export async function modifierSaisie(anciennes: Transaction[], saisie: Saisie) {
 export async function supprimerTransactions(ids: string[]) {
   const { error } = await supabase.from('transactions').delete().in('id', ids)
   echouerSi(error, 'Suppression')
+}
+
+// --- Récurrences ---
+
+export async function lireRecurrences(): Promise<Recurrence[]> {
+  const lignes = await supabase.from('recurrences').select('*').order('libelle').then(verifier<Recurrence[]>)
+  return lignes.map((r) => ({ ...r, montant: Number(r.montant) }))
+}
+
+export type DonneesRecurrence = Omit<Recurrence, 'id'>
+
+export async function enregistrerRecurrence(r: DonneesRecurrence, id?: string) {
+  const { error } = id
+    ? await supabase.from('recurrences').update(r).eq('id', id)
+    : await supabase.from('recurrences').insert(r)
+  echouerSi(error, 'Enregistrement de la récurrence')
+}
+
+// Les opérations déjà générées depuis cette récurrence restent (le lien est mis à vide)
+export async function supprimerRecurrence(id: string) {
+  const { error } = await supabase.from('recurrences').delete().eq('id', id)
+  echouerSi(error, 'Suppression de la récurrence')
 }
 
 // --- Règles de catégorisation ---

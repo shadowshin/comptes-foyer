@@ -6,8 +6,13 @@ import { TableauTransactions } from '../components/TableauTransactions'
 import { FILTRES_VIDES, filtrerTransactions, trierParDateDecroissante } from '../domain/filtres'
 import { saisieDepuisOperations } from '../domain/saisie'
 import type { Transaction } from '../domain/types'
+import { depuisIso } from '../domain/dates'
+import { formaterEuros } from '../domain/montants'
+import { nomCourt, recurrenceSemblable } from '../domain/recurrences'
 import {
   creerSaisie,
+  enregistrerRecurrence,
+  lireRecurrences,
   lireReferentiel,
   lireTransactions,
   modifierSaisie,
@@ -18,6 +23,7 @@ import { useChargement } from '../lib/useChargement'
 export function Transactions() {
   const referentiel = useChargement(lireReferentiel)
   const transactions = useChargement(lireTransactions)
+  const recurrences = useChargement(lireRecurrences)
   const [filtres, setFiltres] = useState(FILTRES_VIDES)
   const [enEdition, setEnEdition] = useState<Transaction[] | null>(null)
   const [message, setMessage] = useState<string | null>(null)
@@ -44,6 +50,51 @@ export function Transactions() {
         </p>
       </section>
     )
+  }
+
+  // Crée une récurrence mensuelle à partir d'une opération réelle, pour la projection
+  async function rendreRecurrente(operations: Transaction[]) {
+    const source = operations.find((o) => o.montant < 0) ?? operations[0]
+    const cible = operations.find((o) => o !== source)
+    if (source.type === 'virement_interne' && !cible) {
+      setMessage("Ce virement n'a pas de compte d'arrivée connu : crée la récurrence depuis la page Trésorerie.")
+      return
+    }
+    const semblable = recurrenceSemblable(recurrences.donnee ?? [], source)
+    if (
+      semblable &&
+      !window.confirm(
+        `Une récurrence semblable existe déjà : « ${semblable.libelle} » (${formaterEuros(semblable.montant)}). ` +
+          'En créer une deuxième la compterait deux fois dans la projection. Continuer quand même ?',
+      )
+    ) {
+      return
+    }
+    const date = depuisIso(source.date_operation).toLocaleDateString('fr-FR')
+    const nom = window.prompt(
+      `Prévoir ${formaterEuros(source.montant)} chaque mois à partir du ${date}. Nom de la récurrence :`,
+      nomCourt(source.libelle),
+    )
+    if (!nom?.trim()) return
+    try {
+      await enregistrerRecurrence({
+        libelle: nom.trim(),
+        compte_id: source.compte_id,
+        compte_cible_id: source.type === 'virement_interne' ? cible!.compte_id : null,
+        type: source.type,
+        categorie_id: source.categorie_id,
+        montant: source.montant,
+        mode_paiement: source.mode_paiement,
+        frequence: 'mensuelle',
+        date_debut: source.date_operation,
+        date_fin: null,
+        actif: true,
+      })
+      setMessage('Récurrence mensuelle créée. Tu peux l’ajuster dans Trésorerie.')
+      await recurrences.recharger()
+    } catch (e) {
+      setMessage(`Erreur : ${(e as Error).message}`)
+    }
   }
 
   async function supprimer(operations: Transaction[]) {
@@ -107,6 +158,7 @@ export function Transactions() {
           window.scrollTo({ top: 0, behavior: 'smooth' })
         }}
         onSupprimer={supprimer}
+        onRendreRecurrente={rendreRecurrente}
       />
     </>
   )

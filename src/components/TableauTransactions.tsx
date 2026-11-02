@@ -13,9 +13,17 @@ interface Props {
   toutes: Transaction[]
   onModifier: (operations: Transaction[]) => void
   onSupprimer: (operations: Transaction[]) => void
+  onRendreRecurrente: (operations: Transaction[]) => void
 }
 
-export function TableauTransactions({ referentiel, transactions, toutes, onModifier, onSupprimer }: Props) {
+export function TableauTransactions({
+  referentiel,
+  transactions,
+  toutes,
+  onModifier,
+  onSupprimer,
+  onRendreRecurrente,
+}: Props) {
   const [affichees, setAffichees] = useState(PAR_PAGE)
   const nomCompte = new Map(referentiel.comptes.map((c) => [c.id, c.nom]))
   const nomCategorie = new Map(referentiel.categories.map((c) => [c.id, c.nom]))
@@ -85,6 +93,15 @@ export function TableauTransactions({ referentiel, transactions, toutes, onModif
                   </td>
                   <td className={`droite montant${t.montant < 0 ? ' negatif' : ''}`}>{formaterEuros(t.montant)}</td>
                   <td className="nowrap">
+                    <button
+                      type="button"
+                      className="bouton-icone"
+                      aria-label={`Rendre récurrente ${t.libelle}`}
+                      title="Rendre récurrente (chaque mois)"
+                      onClick={() => onRendreRecurrente(liees)}
+                    >
+                      ↻
+                    </button>
                     <button
                       type="button"
                       className="bouton-icone"
