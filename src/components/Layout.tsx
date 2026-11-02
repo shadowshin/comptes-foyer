@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 const LIENS = [
   { vers: '/', libelle: 'Comptes' },
   { vers: '/transactions', libelle: 'Transactions' },
+  { vers: '/import', libelle: 'Import' },
   { vers: '/tresorerie', libelle: 'Trésorerie' },
   { vers: '/budgets', libelle: 'Budgets' },
   { vers: '/alertes', libelle: 'Alertes' },

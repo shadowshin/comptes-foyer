@@ -516,6 +516,95 @@ legend {
   margin-left: auto;
 }
 
+/* --- Import --- */
+
+.bouton-fichier {
+  display: inline-block;
+  color: #fff;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  cursor: pointer;
+}
+
+.bouton-fichier input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.bouton-fichier:focus-within {
+  outline: 2px solid var(--accent-clair);
+  outline-offset: 2px;
+}
+
+.liste-fichiers {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.onglets {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.onglet {
+  background: transparent;
+  color: var(--texte-secondaire);
+  border-color: var(--bordure);
+}
+
+.onglet.actif {
+  background: var(--surface-haute);
+  color: var(--texte);
+  border-color: var(--accent);
+}
+
+.classement {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 220px;
+}
+
+.classement select {
+  padding: 0.35rem 0.5rem;
+}
+
+.lien {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent-clair);
+  text-decoration: underline;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.barre-import {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.barre-import p {
+  margin: 0;
+}
+
+.groupe-comptes,
+.carte + .carte {
+  margin-top: 1rem;
+}
+
 .grille-categories {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

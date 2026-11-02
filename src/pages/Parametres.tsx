@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { GestionCategories } from '../components/GestionCategories'
 import { GestionComptes } from '../components/GestionComptes'
 import { GestionMembres } from '../components/GestionMembres'
+import { GestionRegles } from '../components/GestionRegles'
 import { chargerDonneesExemple, compterTransactions, lireReferentiel, viderDonnees } from '../lib/donnees'
 import { useChargement } from '../lib/useChargement'
 
@@ -39,6 +40,7 @@ export function Parametres() {
         <GestionMembres membres={ref.membres} onChange={referentiel.recharger} />
         <GestionComptes referentiel={ref} onChange={referentiel.recharger} />
         <GestionCategories categories={ref.categories} onChange={referentiel.recharger} />
+        <GestionRegles referentiel={ref} />
 
         <section className="carte" aria-labelledby="titre-donnees">
           <h2 id="titre-donnees">Données d'exemple</h2>

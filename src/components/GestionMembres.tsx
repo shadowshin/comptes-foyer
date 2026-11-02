@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import type { Membre } from '../domain/types'
-import { creerMembre, renommerMembre } from '../lib/donnees'
+import { creerMembre, renommerMembre, supprimerMembre } from '../lib/donnees'
 
 interface Props {
   membres: Membre[]
@@ -35,7 +35,7 @@ export function GestionMembres({ membres, onChange }: Props) {
       <h2 id="titre-membres">Membres du foyer</h2>
       <ul className="liste-simple">
         {membres.map((m) => (
-          <li key={m.id}>
+          <li key={m.id} className="ligne-categorie">
             <input
               type="text"
               aria-label={`Nom du membre ${m.nom}`}
@@ -45,6 +45,15 @@ export function GestionMembres({ membres, onChange }: Props) {
                 if (nom && nom !== m.nom) executer(() => renommerMembre(m.id, nom))
               }}
             />
+            <button
+              type="button"
+              className="bouton-discret"
+              onClick={() => {
+                if (window.confirm(`Supprimer le membre « ${m.nom} » ?`)) executer(() => supprimerMembre(m.id))
+              }}
+            >
+              Supprimer
+            </button>
           </li>
         ))}
       </ul>

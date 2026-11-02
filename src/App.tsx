@@ -5,6 +5,7 @@ import { configurationManquante } from './lib/supabase'
 import { AVenir } from './pages/AVenir'
 import { Comptes } from './pages/Comptes'
 import { Connexion } from './pages/Connexion'
+import { Import } from './pages/Import'
 import { Parametres } from './pages/Parametres'
 import { Transactions } from './pages/Transactions'
 
@@ -31,6 +32,7 @@ export default function App() {
           <Route element={<Layout />}>
             <Route index element={<Comptes />} />
             <Route path="transactions" element={<Transactions />} />
+            <Route path="import" element={<Import />} />
             <Route path="tresorerie" element={<AVenir titre="Trésorerie" etape={4} />} />
             <Route path="budgets" element={<AVenir titre="Budgets" etape={5} />} />
             <Route path="alertes" element={<AVenir titre="Alertes" etape={5} />} />

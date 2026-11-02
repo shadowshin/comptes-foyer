@@ -240,8 +240,9 @@ export function GestionComptes({ referentiel, onChange }: Props) {
             )}
           </div>
           <p className="secondaire">
-            Le solde initial est celui du compte à la date indiquée. Seules les opérations à partir de cette date
-            s'ajoutent au solde.
+            Le solde initial est celui du compte à la date indiquée : mets la date à laquelle tu as lu ce montant.
+            Seules les opérations à partir de cette date s'ajoutent au solde (une opération du même jour déjà comprise
+            dans le montant serait comptée deux fois : dans le doute, prends le lendemain).
           </p>
           {erreur && (
             <p className="message-erreur" role="alert">

@@ -1,5 +1,7 @@
 import { genererDonneesExemple } from '../domain/donneesExemple'
 import { versIso } from '../domain/dates'
+import type { LigneAInserer, MiseAJourVirement } from '../domain/import/preparation'
+import type { Regle } from '../domain/import/regles'
 import { construireOperations, type Saisie } from '../domain/saisie'
 import type { Categorie, Compte, CompteMembre, Membre, Transaction } from '../domain/types'
 import { supabase } from './supabase'
@@ -85,6 +87,22 @@ export async function renommerMembre(id: string, nom: string) {
   echouerSi(error, 'Modification du membre')
 }
 
+// Refusée si le membre est titulaire d'un compte : le compte resterait sans titulaire
+export async function supprimerMembre(id: string) {
+  const { count, error } = await supabase
+    .from('comptes_membres')
+    .select('compte_id', { count: 'exact', head: true })
+    .eq('membre_id', id)
+  echouerSi(error, 'Vérification du membre')
+  if (count) {
+    throw new Error(
+      `Ce membre est titulaire de ${count} compte(s) : retire-le d'abord des titulaires (ou supprime ces comptes).`,
+    )
+  }
+  const { error: errSuppression } = await supabase.from('membres').delete().eq('id', id)
+  echouerSi(errSuppression, 'Suppression du membre')
+}
+
 // --- Comptes ---
 
 export type DonneesCompte = Omit<Compte, 'id' | 'cle_import'>
@@ -105,6 +123,11 @@ export async function enregistrerCompte(compte: DonneesCompte, membreIds: string
     .from('comptes_membres')
     .insert(membreIds.map((membre_id) => ({ compte_id: compteId, membre_id })))
   echouerSi(error, 'Enregistrement des titulaires')
+}
+
+export async function modifierSoldeInitial(compteId: string, soldeInitial: number) {
+  const { error } = await supabase.from('comptes').update({ solde_initial: soldeInitial }).eq('id', compteId)
+  echouerSi(error, 'Ajustement du solde initial')
 }
 
 // Suppression réservée aux comptes sans opération : la base supprimerait sinon
@@ -213,6 +236,56 @@ export async function modifierSaisie(anciennes: Transaction[], saisie: Saisie) {
 export async function supprimerTransactions(ids: string[]) {
   const { error } = await supabase.from('transactions').delete().in('id', ids)
   echouerSi(error, 'Suppression')
+}
+
+// --- Règles de catégorisation ---
+
+export async function lireRegles(): Promise<Regle[]> {
+  return supabase
+    .from('regles_categorisation')
+    .select('id, motif, type, categorie_id, compte_cible_id, priorite')
+    .order('motif')
+    .then(verifier<Regle[]>)
+}
+
+export async function creerRegle(regle: Omit<Regle, 'id'>) {
+  const { error } = await supabase.from('regles_categorisation').insert({ ...regle, motif: regle.motif.trim() })
+  echouerSi(error, 'Création de la règle')
+}
+
+export async function supprimerRegle(id: string) {
+  const { error } = await supabase.from('regles_categorisation').delete().eq('id', id)
+  echouerSi(error, 'Suppression de la règle')
+}
+
+// --- Import de relevés ---
+
+export interface DonneesImport {
+  insertions: LigneAInserer[]
+  misesAJour: MiseAJourVirement[]
+  // cleImport → compte, mémorisé pour reconnaître le bloc aux imports suivants
+  rattachements: Record<string, string>
+  nouvellesRegles: Omit<Regle, 'id'>[]
+}
+
+export async function importerReleves(d: DonneesImport) {
+  for (const [cleImport, compteId] of Object.entries(d.rattachements)) {
+    // une clé ne désigne qu'un compte : on la retire d'un éventuel ancien rattachement
+    const { error: errAncien } = await supabase
+      .from('comptes')
+      .update({ cle_import: null })
+      .eq('cle_import', cleImport)
+      .neq('id', compteId)
+    echouerSi(errAncien, 'Rattachement des comptes')
+    const { error } = await supabase.from('comptes').update({ cle_import: cleImport }).eq('id', compteId)
+    echouerSi(error, 'Rattachement des comptes')
+  }
+  if (d.nouvellesRegles.length > 0) await insererParLots('regles_categorisation', d.nouvellesRegles)
+  await insererParLots('transactions', d.insertions)
+  for (const { id, ...modifications } of d.misesAJour) {
+    const { error } = await supabase.from('transactions').update(modifications).eq('id', id)
+    echouerSi(error, 'Liaison des virements')
+  }
 }
 
 // --- Données d'exemple ---
