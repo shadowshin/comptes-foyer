@@ -23,7 +23,7 @@ Priorité : **P1** = parcours critique, **P2** = important, **P3** = confort.
 |---|---|---|---|---|---|
 | E2E-01 | Connexion avec un mauvais mot de passe | Message « Adresse e-mail ou mot de passe incorrect. », on reste sur la page de connexion | P1 | `connexion.spec.ts` | Automatisé |
 | E2E-02 | Accueil : groupes de comptes | Trois groupes (courants, livrets, placements), chacun avec son total ; « Total foyer » = disponible + épargne bloquée | P1 | `comptes.spec.ts` | Automatisé |
-| E2E-03 | Saisie d'une dépense | La dépense apparaît dans le tableau des transactions et le solde du compte baisse du même montant | P1 | `transactions.spec.ts` | À faire |
+| E2E-03 | Saisie d'une dépense | La dépense apparaît dans le tableau des transactions et le solde du compte baisse du même montant | P1 | `transactions.spec.ts` | Automatisé |
 | E2E-04 | Saisie d'un virement interne | Deux opérations liées (sortie et entrée), « Total foyer » inchangé | P1 | `transactions.spec.ts` | À faire |
 | E2E-05 | Import d'un relevé CSV fictif | Aperçu des opérations, import, puis réimport du même fichier sans doublon | P1 | `import.spec.ts` | À faire |
 | E2E-06 | Budget : modifier et enregistrer | Le champ modifié passe en jaune, « Enregistrer les budgets » l'enregistre, la valeur reste après rechargement | P2 | `budgets.spec.ts` | À faire |
