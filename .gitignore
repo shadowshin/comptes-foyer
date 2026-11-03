@@ -16,6 +16,12 @@ dist-ssr
 .env
 .env.*
 !.env.example
+!.env.e2e.example
+
+# Playwright : session du compte de test, rapports et traces
+e2e/.auth/
+playwright-report/
+test-results/
 *.csv
 !tests/fixtures/**/*.csv
 
