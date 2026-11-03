@@ -815,6 +815,11 @@ legend {
   margin-top: 1rem;
 }
 
+/* comptes affichés dans une carte repliable : fond plus clair plutôt qu'une carte dans la carte */
+.repliable .compte {
+  background: var(--surface-haute);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .repliable > summary::before {
     transition: none;

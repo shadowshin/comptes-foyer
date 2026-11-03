@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import { CarteRepliable } from '../components/CarteRepliable'
 import { depuisIso } from '../domain/dates'
 import { formaterEuros, somme } from '../domain/montants'
 import type { NatureCompte } from '../domain/types'
@@ -56,9 +57,10 @@ export function Comptes() {
       {GROUPES.map(({ nature, titre }) => {
         const liste = comptes.filter((c) => c.nature === nature)
         if (liste.length === 0) return null
+        // le total reste visible quand le groupe est replié
+        const total = formaterEuros(somme(liste.map((c) => c.solde)))
         return (
-          <section key={nature} className="groupe-comptes">
-            <h2>{titre}</h2>
+          <CarteRepliable key={nature} id={`comptes.${nature}`} titre={`${titre} · ${total}`} ouverteParDefaut={false}>
             <ul className="liste-comptes">
               {liste.map((c) => (
                 <li key={c.id} className="carte compte">
@@ -73,7 +75,7 @@ export function Comptes() {
                 </li>
               ))}
             </ul>
-          </section>
+          </CarteRepliable>
         )
       })}
     </>
