@@ -3,21 +3,11 @@ import { depuisIso } from '../../domain/dates'
 import { euroCompact, graduations } from '../../domain/echelles'
 import { formaterEuros } from '../../domain/montants'
 import type { FluxJour } from '../../domain/tresorerie'
+import { cheminBarre } from './geometrie'
 import { useLargeur } from './useLargeur'
 
 const HAUTEUR = 240
 const MARGE = { haut: 12, droite: 8, bas: 26, gauche: 56 }
-const RAYON = 4
-
-// Barre arrondie du côté de la valeur, carrée sur la ligne du zéro
-function cheminBarre(x: number, largeur: number, yZero: number, yValeur: number): string {
-  const h = Math.abs(yValeur - yZero)
-  const r = Math.min(RAYON, h, largeur / 2)
-  if (yValeur < yZero) {
-    return `M${x},${yZero} V${yValeur + r} Q${x},${yValeur} ${x + r},${yValeur} H${x + largeur - r} Q${x + largeur},${yValeur} ${x + largeur},${yValeur + r} V${yZero} Z`
-  }
-  return `M${x},${yZero} V${yValeur - r} Q${x},${yValeur} ${x + r},${yValeur} H${x + largeur - r} Q${x + largeur},${yValeur} ${x + largeur},${yValeur - r} V${yZero} Z`
-}
 
 export function GrapheFlux({ flux, titre }: { flux: FluxJour[]; titre: string }) {
   const { ref, largeur } = useLargeur<HTMLDivElement>()

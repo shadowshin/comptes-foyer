@@ -3,12 +3,12 @@ import { AuthProvider } from './auth/AuthProvider'
 import { Layout } from './components/Layout'
 import { configurationManquante } from './lib/supabase'
 import { Alertes } from './pages/Alertes'
-import { AVenir } from './pages/AVenir'
 import { Budgets } from './pages/Budgets'
 import { Comptes } from './pages/Comptes'
 import { Connexion } from './pages/Connexion'
 import { Import } from './pages/Import'
 import { Parametres } from './pages/Parametres'
+import { Rapports } from './pages/Rapports'
 import { Transactions } from './pages/Transactions'
 import { Tresorerie } from './pages/Tresorerie'
 
@@ -39,7 +39,7 @@ export default function App() {
             <Route path="tresorerie" element={<Tresorerie />} />
             <Route path="budgets" element={<Budgets />} />
             <Route path="alertes" element={<Alertes />} />
-            <Route path="rapports" element={<AVenir titre="Rapports" etape={6} />} />
+            <Route path="rapports" element={<Rapports />} />
             <Route path="parametres" element={<Parametres />} />
           </Route>
         </Routes>
