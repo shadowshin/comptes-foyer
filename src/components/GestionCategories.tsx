@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { CATEGORIES_PAR_DEFAUT } from '../domain/categoriesParDefaut'
+import { CarteRepliable } from './CarteRepliable'
 import { LIBELLES_TYPE, type Categorie } from '../domain/types'
 import { creerCategorie, modifierCategorie } from '../lib/donnees'
 
@@ -45,8 +46,7 @@ export function GestionCategories({ categories, onChange }: Props) {
   }
 
   return (
-    <section className="carte" aria-labelledby="titre-categories">
-      <h2 id="titre-categories">Catégories</h2>
+    <CarteRepliable id="parametres.categories" titre="Catégories" ouverteParDefaut={false}>
       {categories.length === 0 && (
         <p>
           <button type="button" className="bouton-principal" onClick={installerParDefaut}>
@@ -105,6 +105,6 @@ export function GestionCategories({ categories, onChange }: Props) {
       <p className="secondaire">
         Une catégorie archivée n'est plus proposée à la saisie, mais reste affichée sur les anciennes opérations.
       </p>
-    </section>
+    </CarteRepliable>
   )
 }

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { CarteRepliable } from './CarteRepliable'
 import type { Membre } from '../domain/types'
 import { creerMembre, renommerMembre, supprimerMembre } from '../lib/donnees'
 
@@ -31,8 +32,7 @@ export function GestionMembres({ membres, onChange }: Props) {
   }
 
   return (
-    <section className="carte" aria-labelledby="titre-membres">
-      <h2 id="titre-membres">Membres du foyer</h2>
+    <CarteRepliable id="parametres.membres" titre="Membres du foyer" ouverteParDefaut={false}>
       <ul className="liste-simple">
         {membres.map((m) => (
           <li key={m.id} className="ligne-categorie">
@@ -74,6 +74,6 @@ export function GestionMembres({ membres, onChange }: Props) {
           {erreur}
         </p>
       )}
-    </section>
+    </CarteRepliable>
   )
 }

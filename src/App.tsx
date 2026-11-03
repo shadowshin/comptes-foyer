@@ -2,7 +2,9 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import { AuthProvider } from './auth/AuthProvider'
 import { Layout } from './components/Layout'
 import { configurationManquante } from './lib/supabase'
+import { Alertes } from './pages/Alertes'
 import { AVenir } from './pages/AVenir'
+import { Budgets } from './pages/Budgets'
 import { Comptes } from './pages/Comptes'
 import { Connexion } from './pages/Connexion'
 import { Import } from './pages/Import'
@@ -29,13 +31,14 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/connexion" element={<Connexion />} />          <Route element={<Layout />}>
+          <Route path="/connexion" element={<Connexion />} />
+          <Route element={<Layout />}>
             <Route index element={<Comptes />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="import" element={<Import />} />
             <Route path="tresorerie" element={<Tresorerie />} />
-            <Route path="budgets" element={<AVenir titre="Budgets" etape={5} />} />
-            <Route path="alertes" element={<AVenir titre="Alertes" etape={5} />} />
+            <Route path="budgets" element={<Budgets />} />
+            <Route path="alertes" element={<Alertes />} />
             <Route path="rapports" element={<AVenir titre="Rapports" etape={6} />} />
             <Route path="parametres" element={<Parametres />} />
           </Route>

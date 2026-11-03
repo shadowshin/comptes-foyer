@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { CarteRepliable } from './CarteRepliable'
 import { ajouterJours, depuisIso, versIso } from '../domain/dates'
 import { classementDepuisValeur, valeurClassement } from '../domain/import/valeurClassement'
 import { LIBELLES_FREQUENCE, lireMontant } from '../domain/libelles'
@@ -104,8 +105,7 @@ export function GestionRecurrences({ referentiel, recurrences, transactions, onC
       : (nomCategorie.get(r.categorie_id ?? '') ?? 'sans catégorie')
 
   return (
-    <section className="carte" aria-labelledby="titre-recurrences">
-      <h2 id="titre-recurrences">Récurrences prévues</h2>
+    <CarteRepliable id="tresorerie.recurrences" titre="Récurrences prévues">
       <p className="secondaire">
         Ce sont elles qui alimentent la projection. Une récurrence ne crée aucune opération : les opérations réelles
         arrivent par l'import ou la saisie.
@@ -293,6 +293,6 @@ export function GestionRecurrences({ referentiel, recurrences, transactions, onC
           </button>
         </>
       )}
-    </section>
+    </CarteRepliable>
   )
 }

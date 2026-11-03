@@ -766,6 +766,203 @@ legend {
   margin-top: 1rem;
 }
 
+/* --- Cartes repliables --- */
+
+.repliable > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 6px;
+}
+
+.repliable > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* chevron qui pivote quand la carte s'ouvre */
+.repliable > summary::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid var(--texte-secondaire);
+  border-bottom: 2px solid var(--texte-secondaire);
+  transform: rotate(-45deg);
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+
+.repliable[open] > summary::before {
+  transform: rotate(45deg);
+}
+
+.repliable > summary h2 {
+  margin: 0;
+}
+
+.repliable > summary:hover h2 {
+  color: var(--accent-clair);
+}
+
+.repliable-contenu {
+  margin-top: 0.9rem;
+}
+
+.contenu > .repliable + .repliable,
+.contenu > .carte + .repliable,
+.contenu > .repliable + .carte {
+  margin-top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .repliable > summary::before {
+    transition: none;
+  }
+}
+
+/* --- Budgets --- */
+
+.mois {
+  align-items: center;
+}
+
+.mois strong {
+  min-width: 9rem;
+  text-align: center;
+}
+
+.tableau-budgets th[scope='row'] {
+  font-weight: 500;
+  color: var(--texte);
+}
+
+.tableau-budgets td {
+  vertical-align: middle;
+}
+
+.champ-budget {
+  margin-top: 0;
+  max-width: 8rem;
+  padding: 0.35rem 0.5rem;
+  text-align: right;
+}
+
+/* reste visible en bas de l'écran pendant qu'on fait défiler les tableaux */
+.barre-enregistrer {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 0.75rem 1rem;
+  z-index: 1;
+}
+
+.champ-budget.modifie {
+  border-color: var(--avertissement);
+}
+
+.cellule-barre {
+  min-width: 160px;
+}
+
+.barre-budget {
+  position: relative;
+  height: 1.4rem;
+  border-radius: 999px;
+  background: var(--surface-haute);
+  overflow: hidden;
+}
+
+.barre-budget-remplissage {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--accent);
+}
+
+.etat-proche .barre-budget-remplissage {
+  background: var(--avertissement);
+}
+
+.etat-depasse .barre-budget-remplissage {
+  background: var(--negatif);
+}
+
+.barre-budget-texte {
+  position: relative;
+  display: block;
+  padding: 0 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 3px #000;
+  font-variant-numeric: tabular-nums;
+}
+
+.secondaire-cellule {
+  color: var(--texte-secondaire);
+}
+
+/* --- Alertes --- */
+
+.groupe-alertes {
+  margin-top: 1.5rem;
+}
+
+.liste-alertes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.alerte {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  border-left-width: 4px;
+}
+
+.alerte p {
+  margin: 0.25rem 0 0;
+}
+
+.alerte-critique {
+  border-left-color: var(--negatif);
+}
+
+.alerte-avertissement {
+  border-left-color: var(--avertissement);
+}
+
+.alerte-info {
+  border-left-color: var(--info);
+}
+
+.alerte-icone {
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.alerte-action {
+  color: var(--texte-secondaire);
+}
+
+.badge-alertes {
+  display: inline-block;
+  margin-left: 0.4rem;
+  min-width: 1.3rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--negatif);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3rem;
+}
+
 .grille-categories {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { CarteRepliable } from '../components/CarteRepliable'
 import { GestionRecurrences } from '../components/GestionRecurrences'
 import { GrapheFlux } from '../components/graphes/GrapheFlux'
 import { GrapheSolde } from '../components/graphes/GrapheSolde'
@@ -142,9 +143,9 @@ export function Tresorerie() {
         </div>
       </div>
 
-      <section className="carte">
+      <CarteRepliable id="tresorerie.flux" titre={`Flux quotidiens · ${nomMois}`}>
         <div className="entete-carte">
-          <h2>Flux quotidiens · {nomMois}</h2>
+          <p className="secondaire">Entrées moins sorties de chaque jour. Barre verte vers le haut : jour positif ; rouge vers le bas : jour négatif.</p>
           <span className="actions">
             <button type="button" className="bouton-discret" aria-label="Mois précédent" onClick={() => setDecalageMois((d) => d - 1)}>
               ‹
@@ -160,12 +161,10 @@ export function Tresorerie() {
             </button>
           </span>
         </div>
-        <p className="secondaire">Entrées moins sorties de chaque jour. Barre verte vers le haut : jour positif ; rouge vers le bas : jour négatif.</p>
         <GrapheFlux flux={flux} titre={`Flux quotidiens de ${nomMois}`} />
-      </section>
+      </CarteRepliable>
 
-      <section className="carte">
-        <h2>Solde et projection à {HORIZON_JOURS} jours</h2>
+      <CarteRepliable id="tresorerie.projection" titre={`Solde et projection à ${HORIZON_JOURS} jours`}>
         <label className="case case-seule">
           <input
             type="checkbox"
@@ -176,10 +175,9 @@ export function Tresorerie() {
           variables depuis le {depuisIso(debutHisto).toLocaleDateString('fr-FR')})
         </label>
         <GrapheSolde titre="Solde passé et projeté" historique={historique} projection={projection} />
-      </section>
+      </CarteRepliable>
 
-      <section className="carte">
-        <h2>Prochaines échéances (30 jours)</h2>
+      <CarteRepliable id="tresorerie.echeances" titre="Prochaines échéances (30 jours)">
         {prochaines.length === 0 ? (
           <p className="secondaire">Aucune récurrence prévue sur ce périmètre dans les 30 prochains jours.</p>
         ) : (
@@ -195,7 +193,7 @@ export function Tresorerie() {
             ))}
           </ul>
         )}
-      </section>
+      </CarteRepliable>
 
       <GestionRecurrences
         referentiel={referentiel.donnee}

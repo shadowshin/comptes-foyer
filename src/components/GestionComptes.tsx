@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { CarteRepliable } from './CarteRepliable'
 import { versIso } from '../domain/dates'
 import { lireMontant } from '../domain/libelles'
 import { formaterEuros } from '../domain/montants'
@@ -106,8 +107,7 @@ export function GestionComptes({ referentiel, onChange }: Props) {
     setEnEdition((e) => e && { ...e, brouillon: { ...e.brouillon, [champ]: valeur } })
 
   return (
-    <section className="carte" aria-labelledby="titre-comptes">
-      <h2 id="titre-comptes">Comptes</h2>
+    <CarteRepliable id="parametres.comptes" titre="Comptes" ouverteParDefaut={false}>
       {referentiel.comptes.length === 0 && <p className="secondaire">Aucun compte.</p>}
       <ul className="liste-simple">
         {referentiel.comptes.map((c) => (
@@ -272,6 +272,6 @@ export function GestionComptes({ referentiel, onChange }: Props) {
           Ajouter un compte
         </button>
       )}
-    </section>
+    </CarteRepliable>
   )
 }

@@ -1,20 +1,25 @@
 import { useState } from 'react'
+import { CarteRepliable } from '../components/CarteRepliable'
 import { GestionCategories } from '../components/GestionCategories'
 import { GestionComptes } from '../components/GestionComptes'
 import { GestionMembres } from '../components/GestionMembres'
 import { GestionRegles } from '../components/GestionRegles'
-import { chargerDonneesExemple, compterTransactions, lireReferentiel, viderDonnees } from '../lib/donnees'
+import { GestionSeuils } from '../components/GestionSeuils'
+import { chargerDonneesExemple, compterTransactions, lireParametres, lireReferentiel, viderDonnees } from '../lib/donnees'
 import { useChargement } from '../lib/useChargement'
 
 export function Parametres() {
   const referentiel = useChargement(lireReferentiel)
   const nbTransactions = useChargement(compterTransactions)
+  const parametres = useChargement(lireParametres)
   const [enCours, setEnCours] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
 
-  const erreur = referentiel.erreur ?? nbTransactions.erreur
+  const erreur = referentiel.erreur ?? nbTransactions.erreur ?? parametres.erreur
   if (erreur) return <p className="message-erreur">Impossible de charger les paramètres : {erreur}</p>
-  if (!referentiel.donnee || nbTransactions.donnee === null) return <p className="chargement">Chargement…</p>
+  if (!referentiel.donnee || nbTransactions.donnee === null || !parametres.donnee) {
+    return <p className="chargement">Chargement…</p>
+  }
 
   const ref = referentiel.donnee
   const baseVide =
@@ -41,9 +46,9 @@ export function Parametres() {
         <GestionComptes referentiel={ref} onChange={referentiel.recharger} />
         <GestionCategories categories={ref.categories} onChange={referentiel.recharger} />
         <GestionRegles referentiel={ref} />
+        <GestionSeuils parametres={parametres.donnee} onChange={parametres.recharger} />
 
-        <section className="carte" aria-labelledby="titre-donnees">
-          <h2 id="titre-donnees">Données d'exemple</h2>
+        <CarteRepliable id="parametres.donnees" titre="Données d'exemple" ouverteParDefaut={false}>
           <p>
             Trois mois de données fictives pour découvrir l'appli, chargeables uniquement sur une base vide. À vider
             avant de saisir ou d'importer tes vraies données.
@@ -72,7 +77,7 @@ export function Parametres() {
             </button>
           </div>
           {message && <p role="status">{message}</p>}
-        </section>
+        </CarteRepliable>
       </div>
     </>
   )

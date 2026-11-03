@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { CarteRepliable } from './CarteRepliable'
 import { classementDepuisValeur } from '../domain/import/valeurClassement'
 import { creerRegle, lireRegles, supprimerRegle, type Referentiel } from '../lib/donnees'
 import { useChargement } from '../lib/useChargement'
@@ -45,8 +46,7 @@ export function GestionRegles({ referentiel }: Props) {
   }
 
   return (
-    <section className="carte" aria-labelledby="titre-regles">
-      <h2 id="titre-regles">Règles d'import</h2>
+    <CarteRepliable id="parametres.regles" titre="Règles d'import" ouverteParDefaut={false}>
       <p className="secondaire">
         À l'import, une opération dont le libellé contient le texte indiqué (sans tenir compte des majuscules ni des
         accents) est classée automatiquement. Un virement vers un placement jamais importé crée aussi l'entrée sur ce
@@ -100,6 +100,6 @@ export function GestionRegles({ referentiel }: Props) {
           {erreur}
         </p>
       )}
-    </section>
+    </CarteRepliable>
   )
 }

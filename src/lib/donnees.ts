@@ -3,7 +3,17 @@ import { versIso } from '../domain/dates'
 import type { LigneAInserer, MiseAJourVirement } from '../domain/import/preparation'
 import type { Regle } from '../domain/import/regles'
 import { construireOperations, type Saisie } from '../domain/saisie'
-import type { Categorie, Compte, CompteMembre, Membre, Recurrence, Transaction } from '../domain/types'
+import {
+  PARAMETRES_PAR_DEFAUT,
+  type Budget,
+  type Categorie,
+  type Compte,
+  type CompteMembre,
+  type Membre,
+  type Parametres,
+  type Recurrence,
+  type Transaction,
+} from '../domain/types'
 import { supabase } from './supabase'
 
 const TAILLE_LOT = 500
@@ -278,6 +288,45 @@ export async function creerRegle(regle: Omit<Regle, 'id'>) {
 export async function supprimerRegle(id: string) {
   const { error } = await supabase.from('regles_categorisation').delete().eq('id', id)
   echouerSi(error, 'Suppression de la règle')
+}
+
+// --- Budgets ---
+
+export async function lireBudgets(): Promise<Budget[]> {
+  const lignes = await supabase.from('budgets').select('id, categorie_id, montant_mensuel').then(verifier<Budget[]>)
+  return lignes.map((b) => ({ ...b, montant_mensuel: Number(b.montant_mensuel) }))
+}
+
+// Un budget par catégorie : on modifie celui qui existe, sinon on le crée
+export async function enregistrerBudget(categorieId: string, montant: number, existant?: Budget) {
+  const { error } = existant
+    ? await supabase.from('budgets').update({ montant_mensuel: montant }).eq('id', existant.id)
+    : await supabase.from('budgets').insert({ categorie_id: categorieId, montant_mensuel: montant })
+  echouerSi(error, 'Enregistrement du budget')
+}
+
+export async function supprimerBudget(id: string) {
+  const { error } = await supabase.from('budgets').delete().eq('id', id)
+  echouerSi(error, 'Suppression du budget')
+}
+
+// --- Paramètres (seuils d'alerte) ---
+
+// La ligne n'existe qu'après un premier enregistrement : sinon, valeurs de départ
+export async function lireParametres(): Promise<Parametres> {
+  const ligne = await supabase
+    .from('parametres')
+    .select('seuil_critique, seuil_avertissement, alerte_budget_pct, baisse_revenus_pct, delai_echeance_jours, delai_placement_jours')
+    .maybeSingle()
+    .then(verifier<Parametres | null>)
+  if (!ligne) return PARAMETRES_PAR_DEFAUT
+  return { ...ligne, seuil_critique: Number(ligne.seuil_critique), seuil_avertissement: Number(ligne.seuil_avertissement) }
+}
+
+// La clé primaire est owner_id, remplie par la base : l'upsert crée ou met à jour la ligne
+export async function enregistrerParametres(p: Parametres) {
+  const { error } = await supabase.from('parametres').upsert(p, { onConflict: 'owner_id' })
+  echouerSi(error, 'Enregistrement des seuils')
 }
 
 // --- Import de relevés ---

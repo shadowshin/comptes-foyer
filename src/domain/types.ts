@@ -94,6 +94,26 @@ export interface Budget {
   montant_mensuel: number
 }
 
+// Seuils des alertes, une ligne par utilisatrice (table parametres)
+export interface Parametres {
+  seuil_critique: number
+  seuil_avertissement: number
+  alerte_budget_pct: number
+  baisse_revenus_pct: number
+  delai_echeance_jours: number
+  delai_placement_jours: number
+}
+
+// Valeurs de départ, identiques aux valeurs par défaut de la table
+export const PARAMETRES_PAR_DEFAUT: Parametres = {
+  seuil_critique: 0,
+  seuil_avertissement: 150,
+  alerte_budget_pct: 80,
+  baisse_revenus_pct: 20,
+  delai_echeance_jours: 7,
+  delai_placement_jours: 30,
+}
+
 export const LIBELLES_TYPE: Record<TypeTransaction, string> = {
   revenu: 'Revenu',
   depense_fixe: 'Dépense fixe',
