@@ -14,4 +14,13 @@ export class FormulaireTransaction {
     await this.formulaire.getByRole('combobox', { name: 'Catégorie' }).selectOption(d.categorie)
     await this.formulaire.getByRole('button', { name: 'Ajouter la transaction' }).click()
   }
+
+  async saisirVirement(d: { description: string; montant: string; compte: string; destination: string }) {
+    await this.formulaire.getByRole('textbox', { name: 'Description' }).fill(d.description)
+    await this.formulaire.getByRole('textbox', { name: 'Montant (€)' }).fill(d.montant)
+    await this.formulaire.getByRole('combobox', { name: 'Type' }).selectOption('Virement interne')
+    await this.formulaire.getByRole('combobox', { name: 'Compte de départ' }).selectOption(d.compte)
+    await this.formulaire.getByRole('combobox', { name: 'Compte de destination' }).selectOption(d.destination)
+    await this.formulaire.getByRole('button', { name: 'Ajouter la transaction' }).click()
+  }
 }
