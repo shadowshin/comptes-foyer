@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unitaires:
+    name: Lint, tests unitaires et build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  e2e:
+    name: Tests de bout en bout (Playwright)
+    needs: unitaires
+    runs-on: ubuntu-latest
+    # Les secrets ne sont pas transmis aux pull requests venant d'un fork : on ne lance
+    # les tests de bout en bout que pour le dépôt lui-même
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    # Un seul compte et une seule base de test : deux exécutions en même temps se
+    # marcheraient dessus, la seconde attend la fin de la première
+    concurrency:
+      group: e2e-base-de-test
+      cancel-in-progress: false
+    timeout-minutes: 15
+    env:
+      # Projet Supabase DE TEST uniquement, jamais celui des vraies données
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+      E2E_EMAIL: ${{ secrets.E2E_EMAIL }}
+      E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e
+      # Volontairement aucun rapport ni trace publié en artefact : le dépôt est public
+      # et les traces contiennent les saisies du compte de test (identifiants compris).
+      # En cas d'échec, le détail est dans le journal ci-dessus et dans les annotations.

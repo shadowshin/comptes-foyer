@@ -16,7 +16,9 @@ export default defineConfig({
   workers: 1,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'on-failure' }]],
+  // En CI : journal et annotations GitHub seulement, pas de rapport HTML (il contiendrait
+  // les saisies du compte de test et le dépôt est public)
+  reporter: process.env.CI ? [['list'], ['github']] : [['list'], ['html', { open: 'on-failure' }]],
   use: {
     baseURL: `http://localhost:${PORT}`,
     locale: 'fr-FR',

@@ -1,5 +1,7 @@
 # Comptes du foyer
 
+[![CI](https://github.com/shadowshin/comptes-foyer/actions/workflows/ci.yml/badge.svg)](https://github.com/shadowshin/comptes-foyer/actions/workflows/ci.yml)
+
 Application personnelle de gestion des comptes d'un foyer : saisie des transactions, import des relevés bancaires (Crédit Agricole, Caisse d'Épargne), trésorerie et projection à 90 jours, budgets, alertes et rapports.
 
 React + TypeScript (Vite), Supabase (Postgres, authentification, RLS), déploiement Vercel.
